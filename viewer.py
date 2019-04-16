@@ -63,8 +63,6 @@ def make_dirs(observations):
     if not os.path.exists('obs_viewer_files'):
         os.mkdir('obs_viewer_files')
     os.chdir('obs_viewer_files')
-    if not os.path.exists("modded"):
-        os.mkdir('modded')
 
     for obs in observations:
         if not os.path.exists(obs):
@@ -78,7 +76,7 @@ def cleanup(observations):
 
 def setup_downloads(observations):
     queue = Queue()
-    for i in range(1):#range(len(observations)):
+    for i in range(1):
         worker = SCPWorker(queue)
         worker.daemon = True
         worker.start()
@@ -117,7 +115,7 @@ if __name__ == '__main__':
         obs_obj = Observation(obs, im_path=obs, region_file="{}/final_class_regions_REDO.reg".format(obs))
         obs_obj.setup_image(stretch="sqrt")
         obs_obj.setup_regions()
-        obs_obj.edit(for_msl=True, save_path="modded", sources_path=obs, sig_path=obs)
+        obs_obj.edit(for_msl=True, save_path=obs, sources_path=obs, sig_path=obs)
 
     # Deletes images and files if the clean argument was true
     if clean.lower() == 'true':
