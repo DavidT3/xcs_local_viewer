@@ -120,7 +120,7 @@ if __name__ == '__main__':
         obs_obj = Observation(obs, im_path=obs, region_file="{}/final_class_regions_REDO.reg".format(obs))
         obs_obj.setup_image(stretch="sqrt")
         obs_obj.setup_regions()
-        obs_obj.edit(for_msl=True, save_path=obs+"_modified", sources_path=obs, sig_path=obs)
+        obs_obj.edit(for_msl=True, save_path=obs+"_modded", sources_path=obs, sig_path=obs)
 
     # Deletes images and files if the clean argument was true
     if clean.lower() == 'true':
