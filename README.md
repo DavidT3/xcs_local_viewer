@@ -26,7 +26,7 @@ This will call the viewer and delete all downloaded files after viewer.py finish
 * Click and drag to move the selected region; if you are unhappy with your new placement, press ctrl+z to undo.
 * To resize the selected region, use the wasd keys, q and e change the angle.
 * To make a new region, click the place on the screen you want it to appear, then press one of the buttons on the left side of the screen.
-* Click save to create modified files (these will be saved to a directory called {obs}_modded, in the obs_viewer_files directory.
+* Click save to create modified files (these will be saved to a local directory called {obs}_modded, in the obs_viewer_files directory.
 * Close the viewer window to trigger the next observation (if you do this within ~10 seconds of opening the last one then you might have a crash, as the files may not have downloaded).
 
 ## Notes
