@@ -11,7 +11,6 @@ from queue import Queue
 import subprocess
 from time import sleep
 
-username = 'dt237'
 xcs_dir = "/lustre/scratch/astro/xcs/XMM_observations/"
 xcs_img_dir = "data/{obs_id}/images/"
 xcs_file_dir = "code/xapa/id_results/{obs_id}/"
@@ -109,6 +108,7 @@ if __name__ == '__main__':
 
     obs_file = str(sys.argv[1])
     clean = str(sys.argv[2])
+    username = str(input("Apollo Username: "))
 
     # Reads observations from file, and strips newline operators.
     obs_ids = open(obs_file, 'r').readlines()
