@@ -4,6 +4,11 @@ Simple viewer that uses the FCtrlA module to locally view XCS images.
 ## Requirements
 * Python 3.5+
 * RustyRegions from FCtrlA (email david.turner@sussex.ac.uk for this code)
+* Matplotlib
+* Astropy
+* Pandas
+* Regions
+* PyQt5
 * A user account on Apollo
 * You must have exchanged RSA keys with Apollo (otherwise you're going to get a LOT of password requests).
 

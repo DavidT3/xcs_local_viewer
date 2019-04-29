@@ -88,7 +88,7 @@ def setup_downloads(observations):
     for obs in observations:
         queue.put(obs)
 
-    while queue.unfinished_tasks > len(observations)-2:
+    while queue.unfinished_tasks > max(len(observations)-2, 0):
         pass
 
 
@@ -108,12 +108,12 @@ if __name__ == '__main__':
 
     obs_file = str(sys.argv[1])
     clean = str(sys.argv[2])
-    username = str(input("Apollo Username: "))
 
     # Reads observations from file, and strips newline operators.
     obs_ids = open(obs_file, 'r').readlines()
     obs_ids = [ident.split('\n')[0] for ident in obs_ids]
     make_dirs(obs_ids)
+    username = str(input("Apollo Username: "))
 
     setup_downloads(obs_ids)
     for obs in obs_ids:
