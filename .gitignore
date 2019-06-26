@@ -69,3 +69,5 @@ fabric.properties
 
 # Makes sure the config file will never be pushed
 config.txt
+username.txt
+RustyRegions.py
