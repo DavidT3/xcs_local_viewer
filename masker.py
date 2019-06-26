@@ -1,7 +1,7 @@
 """
-A script that uses FCtrlA's RustyRegion code to display/edit XCS regions locally. The aim being to avoid the performance
-limitations of running RustyRegions on Apollo. It takes two arguments, a csv file of ObsIDs and a boolean argument to
-determine if the code deletes files afterwards.
+A script that uses FCtrlA's RustyRegion code to locally display XCS images/regions, and then create masking files for
+them. The aim being to avoid the performance limitations of running RustyRegions on Apollo. It takes two arguments, a
+csv file of ObsIDs and a boolean argument to determine if the code deletes files afterwards.
 """
 from RustyRegions import Observation
 import sys
@@ -18,7 +18,6 @@ image_files = ["{obs_id}-0.50-2.00keV-pn_merged_img.fits",
                "{obs_id}-0.50-2.00keV-mos1_merged_img.fits",
                "{obs_id}-0.50-2.00keV-mos2_merged_img.fits",
                "{obs_id}-0.50-2.00keVmerged_img.fits"]
-files_files = ["final_class_regions_REDO.reg", "final_sigs_all.dat", "final_source_summaries.dat"]
 
 
 class SCPWorker(Thread):
@@ -46,31 +45,22 @@ def file_grabber(observation):
                                                                                                     img_names),
                                                                                                 obs_id=observation)
 
-    file_cmd = r"scp {uname}@apollo.hpc.susx.ac.uk:{path}{file_path}{{\{files}\}} {obs_id}".format(uname=username,
-                                                                                                   path=xcs_dir,
-                                                                                                   file_path=xcs_file_dir.format(
-                                                                                                       obs_id=observation),
-                                                                                                   files=','.join(
-                                                                                                       files_files),
-                                                                                                   obs_id=observation)
+    file_cmd = r"scp {uname}@apollo.hpc.susx.ac.uk:" \
+               r"{path}{file_path}{files} {obs_id}".format(uname=username, path=xcs_dir,
+                                                           file_path=xcs_file_dir.format(obs_id=observation),
+                                                           files="final_class_regions_REDO.reg", obs_id=observation)
     subprocess.call(img_cmd, shell=True)
     subprocess.call(file_cmd, shell=True)
     sleep(5)
 
 
 def make_dirs(observations):
-    if not os.path.exists('obs_viewer_files'):
-        os.mkdir('obs_viewer_files')
-    os.chdir('obs_viewer_files')
-
-    for obs in observations:
-        if not os.path.exists(obs):
-            os.mkdir(obs)
-        if not os.path.exists(obs + "_modded"):
-            os.mkdir(obs + "_modded")
-        else:
-            print("A modded {obs} directory already exists, exiting program!".format(obs=obs))
-            sys.exit(1)
+    if not os.path.exists('masker'):
+        os.mkdir('masker')
+    os.chdir('masker')
+    for o in observations:
+        if not os.path.exists(o):
+            os.mkdir(o)
 
 
 def cleanup(observations):
@@ -123,10 +113,12 @@ if __name__ == '__main__':
     obs_ids = [ident.split('\n')[0] for ident in obs_ids]
     make_dirs(obs_ids)
     setup_downloads(obs_ids)
+
+    # TODO Make it email the mask files to me
     for obs in obs_ids:
         obs_obj = Observation(obs, im_path=obs, region_file="{}/final_class_regions_REDO.reg".format(obs))
         obs_obj.setup_image(stretch="log")
-        obs_obj.edit_regions(for_msl=True, save_path=obs+"_modded", sources_path=obs, sig_path=obs)
+        obs_obj.create_mask(with_regions=True, with_renorm=True)
 
     # Deletes images and files if the clean argument was true
     if clean.lower() == 'true':
